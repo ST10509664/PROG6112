@@ -1,0 +1,249 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ */
+
+package com.mycompany.prog6112_assignment1_st10509664;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.util.Scanner;
+import java.io.IOException;
+import java.io.FileWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
+public class PROG6112_Assignment1_ST10509664 {
+    static int count = 0;
+    static String searchID = "";
+    //array declaration
+   static String[] ID = new String[50];
+   static String[] name1 = new String[50];
+   static String[] name2 = new String[50];
+   static String[] Age = new String[50];
+   static String[] Gender = new String[50];
+   static String[] Condition = new String[50];
+   static String[] Category = new String[50];
+
+                
+     
+    public static void main(String[] args) {
+      
+      //check that text file exists to read and write details
+        File file = new File("Patients.txt");
+        if (!file.exists()) {
+          try {
+              file.createNewFile();
+          } catch (IOException e) {
+              System.out.println("Error creating file: " + e.getMessage());
+          }
+            System.out.println("File created");
+        }
+        
+      Scanner input = new Scanner(System.in);  
+      boolean running = true;  
+      
+        System.out.println("=====================================================");  
+        System.out.println("\t\tWelcome!");
+        System.out.println("====================================================="); 
+        
+      while(running == true){
+        System.out.println("Please select one of the following options below");
+        System.out.println("1) Register a new patient");
+        System.out.println("2) Search for a patient");
+        System.out.println("3) Update an existing patient's details");
+        System.out.println("4) Delete a patient");
+        System.out.println("5) Display all registered patients");
+        System.out.println("6) Exit application");
+        int option = input.nextInt();
+        input.nextLine();
+        
+        switch (option) {
+            case 1:
+              System.out.println("--------------------------------------------------");
+              System.out.print("Please enter patient ID: ");
+              String patientID = input.nextLine();
+              System.out.print("Please enter your first name: ");
+              String firstName = input.nextLine();
+              System.out.print("Please enter your last name: ");
+              String lastName = input.nextLine();
+              System.out.print("Please enter your age: ");
+              String age = input.nextLine();
+              System.out.print("Please enter your gender (female/male): ");
+              String gender = input.nextLine();
+              System.out.print("Please enter your medical condition: ");
+              String medicalCondition = input.nextLine();
+              System.out.print("Please enter the applicable category as a petient; Inpatient, Outpatient or Emergency: ");
+              String category = input.nextLine();
+
+              //wtite to the textfile (append)
+              try ( BufferedWriter writeFile = new BufferedWriter(new FileWriter("Patients.txt", true))) { 
+               writeFile.newLine();
+               writeFile.write(patientID + "#" + firstName + "#" + lastName + "#" + age + "#" + gender + "#" + medicalCondition + "#" + category);
+               writeFile.close();
+               
+               System.out.println("\n--------------------------------------------------");
+               System.out.println("New patient successfully registered");
+              } catch(IOException e) {
+                  System.out.println("\n--------------------------------------------------");
+                  System.out.println("An error occurred.");
+              }
+            break;    
+
+            case 2: 
+                System.out.print("Please enter a patient ID: ");
+                searchID = input.nextLine();
+                
+                //create object to call method
+                PROG6112_Assignment1_ST10509664 details = new PROG6112_Assignment1_ST10509664();
+                details.getDetails();
+                
+               //loop through array ID and search for the appropriate ID
+                boolean validID = false;
+                for(int i = 0; i < count; i++){
+                  if (ID[i].equals(searchID)){
+                      validID = true;
+                      System.out.println("--------------------------------------------------");
+                      System.out.println("\tMatching patient ID found");
+                      System.out.println("--------------------------------------------------");
+                      System.out.println("Patient ID: " + ID[i]);
+                      System.out.println("First Name " + name1[i]);
+                      System.out.println("Last Name: " + name2[i]);
+                      System.out.println("Age: " + Age[i]);
+                      System.out.println("Gender: " + Gender[i]);
+                      System.out.println("Medical Condition: " + Condition[i]);
+                      System.out.println("Patient Category: " + Category[i]);
+                      System.out.println("--------------------------------------------------");
+                  }
+                }
+                
+                if(validID == false) {
+                    System.out.println("--------------------------------------------------");
+                    System.out.println("Patient ID not found!");
+                }
+                
+            break;
+            
+            case 3: 
+                System.out.print("Please enter a patient ID: ");
+                searchID = input.nextLine();
+                PROG6112_Assignment1_ST10509664 details2 = new PROG6112_Assignment1_ST10509664();
+                details2.getDetails();
+                
+                //find the correct index to delete the correct line
+                int matchIndex = -1;
+                for (int i = 0; i < count; i++) {
+                    if (ID[i].equals(searchID)) {
+                        matchIndex = i;
+                        break;
+                    }
+                }
+                
+                if (matchIndex == -1) {
+                    System.out.println("Patient ID not found!");
+                } else {
+                    String lineToRemove = ID[matchIndex] + "#" + name1[matchIndex] + "#" + name2[matchIndex] + "#" + Age[matchIndex] + "#" + Gender[matchIndex] + "#" + Condition[matchIndex] + "#" + Category[matchIndex];
+
+                //remove the line existing within the textfile
+                Path originalPath = Paths.get("Patients.txt");
+                Path tempPath = Paths.get("Patients_temp.txt");
+                
+                try (BufferedReader reader = new BufferedReader(new FileReader(originalPath.toFile()));
+                     BufferedWriter writer = new BufferedWriter(new FileWriter(tempPath.toFile()))) {
+                    String currentLine;
+
+                    while ((currentLine = reader.readLine()) != null) {
+                        // If it's not the line to delete, write it to the temp file
+                        if (!currentLine.trim().equals(lineToRemove)) {
+                            writer.write(currentLine);
+                            writer.newLine();
+                        }
+                    }
+                    writer.close();
+                    reader.close();
+                    // Replace the original file with the temporary file
+                    Files.move(tempPath, originalPath, StandardCopyOption.REPLACE_EXISTING);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+                
+                //input information for update
+                System.out.println("------------------------------------------------------------------");
+                System.out.println("\tMatching patient ID found; Update details");
+                System.out.println("------------------------------------------------------------------");
+                System.out.print("Please enter your first name: ");
+                String newFirstName = input.nextLine();
+                System.out.print("Please enter your last name: ");
+                String newLastName = input.nextLine();
+                System.out.print("Please enter your age: ");
+                String newAge = input.nextLine();
+                System.out.print("Please enter your gender (female/male): ");
+                String newGender = input.nextLine();
+                System.out.print("Please enter your medical condition: ");
+                String newMedicalCondition = input.nextLine();
+                System.out.print("Please enter the applicable category as a petient; Inpatient, Outpatient or Emergency: ");
+                String newCategory = input.nextLine();
+                System.out.println("--------------------------------------------------");
+                
+              //wtite to the textfile (append)
+              try ( BufferedWriter writeFile = new BufferedWriter(new FileWriter("Patients.txt", true))) { 
+               writeFile.write(searchID + "#" + newFirstName + "#" + newLastName + "#" + newAge + "#" + newGender + "#" + newMedicalCondition + "#" + newCategory);
+               writeFile.newLine();
+               writeFile.close();
+               
+               System.out.println("\n--------------------------------------------------");
+               System.out.println("New patient successfully registered");
+              } catch(IOException e) {
+                  System.out.println("\n--------------------------------------------------");
+                  System.out.println("An error occurred.");
+              } 
+                
+            break;
+            
+            case 6:
+                System.out.println("--------------------------------------------------");
+                System.out.println("Goodbye!");
+                running = false;
+                System.exit(0);
+          }  
+
+        }
+    }
+    
+    public void getDetails() {
+        try {
+            count = 0;
+            BufferedReader reader = new BufferedReader(new FileReader("Patients.txt"));
+            String line;
+            //loop from begining of textfile till the end
+             while ((line = reader.readLine()) != null && count < ID.length) {
+            //spilt everytime a # is found
+              String[] parts = line.split("#", 7);
+              if (parts.length < 5) {
+                  System.out.println("Skipping line: " + line);
+              }
+              //assign the corrrect parts from the textfile to the appropriate array
+              ID[count] = parts[0];
+              name1[count] = parts[1];
+              name2[count] = parts[2];
+              Age[count] = parts[3];
+              Gender[count] = parts[4];
+              Condition[count] = parts[5];
+              Category[count] = parts[6];
+
+              count++;
+              }
+             reader.close();
+             
+        } catch (IOException e) {
+            System.out.println("\n--------------------------------------------------");
+            System.out.println("An error occurred.");
+      }    
+    }
+    
+}
