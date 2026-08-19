@@ -202,7 +202,80 @@ public class PROG6112_Assignment1_ST10509664 {
                   System.out.println("\n--------------------------------------------------");
                   System.out.println("An error occurred.");
               } 
+            break;
+            
+            case 4:
+                System.out.print("Please enter a patient ID: ");
+                searchID = input.nextLine();
                 
+                PROG6112_Assignment1_ST10509664 details3 = new PROG6112_Assignment1_ST10509664();
+                details3.getDetails();
+                
+                //find the correct index to delete the correct line
+                int matchIndex2 = -1;
+                for (int i = 0; i < count; i++) {
+                    if (ID[i].equals(searchID)) {
+                        matchIndex2 = i;
+                        break;
+                    }
+                }
+                
+                if (matchIndex2 == -1) {
+                    System.out.println("Patient ID not found!");
+                } else {
+                    String lineToRemove = ID[matchIndex2] + "#" + name1[matchIndex2] + "#" + name2[matchIndex2] + "#" + Age[matchIndex2] + "#" + Gender[matchIndex2] + "#" + Condition[matchIndex2] + "#" + Category[matchIndex2];
+
+                //remove the line existing within the textfile
+                Path originalPath = Paths.get("Patients.txt");
+                Path tempPath = Paths.get("Patients_temp.txt");
+                
+                try (BufferedReader reader = new BufferedReader(new FileReader(originalPath.toFile()));
+                     BufferedWriter writer = new BufferedWriter(new FileWriter(tempPath.toFile()))) {
+                    String currentLine;
+
+                    while ((currentLine = reader.readLine()) != null) {
+                        // If it's not the line to delete, write it to the temp file
+                        if (!currentLine.trim().equals(lineToRemove)) {
+                            writer.write(currentLine);
+                            writer.newLine();
+                        }
+                    }
+                    writer.close();
+                    reader.close();
+                    // Replace the original file with the temporary file
+                    Files.move(tempPath, originalPath, StandardCopyOption.REPLACE_EXISTING);
+                    System.out.println("\n--------------------------------------------------");
+                    System.out.println("Patient successfully deleted");
+                    System.out.println("\n--------------------------------------------------");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            break;
+            
+            case 5:
+                PROG6112_Assignment1_ST10509664 details4 = new PROG6112_Assignment1_ST10509664();
+                details4.getDetails();
+                
+                if (count == 0) {
+                    System.out.println("No patients registered yet.");
+                } else {
+                    System.out.println("\n--------------------------------------------------");
+                    System.out.println("\tAll Registered Patients");
+                    System.out.println("--------------------------------------------------");
+
+                    for (int i = 0; i < count; i++) {
+                        System.out.println("Patient ID: " + ID[i]);
+                        System.out.println("First Name: " + name1[i]);
+                        System.out.println("Last Name: " + name2[i]);
+                        System.out.println("Age: " + Age[i]);
+                        System.out.println("Gender: " + Gender[i]);
+                        System.out.println("Medical Condition: " + Condition[i]);
+                        System.out.println("Patient Category: " + Category[i]);
+                        System.out.println("--------------------------------------------------");
+                    }
+                }
             break;
             
             case 6:
@@ -210,6 +283,9 @@ public class PROG6112_Assignment1_ST10509664 {
                 System.out.println("Goodbye!");
                 running = false;
                 System.exit(0);
+            default:
+            System.out.println("Invalid option");
+            break;
           }  
 
         }
