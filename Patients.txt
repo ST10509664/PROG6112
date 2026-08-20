@@ -1,5 +1,7 @@
 83794#James#Sand#20#male#Fever#Inpatient
 32897#Peach#Lysander#23#female#Pink eye#Inpatient
 28324#Gloria#Merman#29#female#Insomnia#Outpatient
+37242#Tom#Jerry#16#male#paranoia#Inpatient
 83942#Miles#Moralis#18#male#Radiation#Inpatient
 37242#Tom#Jerry#16#male#paranoia#Inpatient
+83942#Miles#Moralis#18#male#Radiation#Inpatient
