@@ -62,10 +62,12 @@ public class PROG6112_Assignment1_ST10509664 {
         System.out.println("4) Delete a patient");
         System.out.println("5) Display all registered patients");
         System.out.println("6) Bed Management");
-        System.out.println("7) Exit application");
+        System.out.println("7) Generate report");
+        System.out.println("8) Exit application");
         int option = input.nextInt();
         input.nextLine();
         
+        PROG6112_Assignment1_ST10509664 details = new PROG6112_Assignment1_ST10509664();
         switch (option) {
             case 1:
               System.out.println("--------------------------------------------------");
@@ -83,7 +85,42 @@ public class PROG6112_Assignment1_ST10509664 {
               String medicalCondition = input.nextLine();
               System.out.print("Please enter the applicable category as a petient; Inpatient, Outpatient or Emergency: ");
               String category = input.nextLine();
+              
+              details.getDetails();
+              boolean valid = true;
+              for(int i = 0; i < count; i++){
+                  if(patientID.equals(ID[i])){
+                      valid = false;
+                  }
+              }
+              //if the ID already exists, have to reenter details with non existing ID
+              while(valid == false) {
+                System.out.println("--------------------------------------------------");
+                System.out.println("Patient ID already exists. Please eneter the correct patient ID");  
+                valid = true;
+                System.out.println("--------------------------------------------------");
+                System.out.print("Please enter patient ID: ");
+                patientID = input.nextLine();
+                System.out.print("Please enter your first name: ");
+                firstName = input.nextLine();
+                System.out.print("Please enter your last name: ");
+                lastName = input.nextLine();
+                System.out.print("Please enter your age: ");
+                age = input.nextLine();
+                System.out.print("Please enter your gender (female/male): ");
+                gender = input.nextLine();
+                System.out.print("Please enter your medical condition: ");
+                medicalCondition = input.nextLine();
+                System.out.print("Please enter the applicable category as a petient; Inpatient, Outpatient or Emergency: ");
+                category = input.nextLine();
 
+                details.getDetails();
+                for(int i = 0; i < count; i++){
+                    if(patientID.equals(ID[i])){
+                        valid = false;
+                    }
+                }
+              }
               //wtite to the textfile (append)
               try ( BufferedWriter writeFile = new BufferedWriter(new FileWriter("Patients.txt", true))) { 
                writeFile.newLine();
@@ -103,7 +140,6 @@ public class PROG6112_Assignment1_ST10509664 {
                 searchID = input.nextLine();
                 
                 //create object to call method
-                PROG6112_Assignment1_ST10509664 details = new PROG6112_Assignment1_ST10509664();
                 details.getDetails();
                 
                //loop through array ID and search for the appropriate ID
@@ -135,8 +171,7 @@ public class PROG6112_Assignment1_ST10509664 {
             case 3: 
                 System.out.print("Please enter a patient ID: ");
                 searchID = input.nextLine();
-                PROG6112_Assignment1_ST10509664 details2 = new PROG6112_Assignment1_ST10509664();
-                details2.getDetails();
+                details.getDetails();
                 
                 //find the correct index to delete the correct line
                 int matchIndex = -1;
@@ -214,8 +249,7 @@ public class PROG6112_Assignment1_ST10509664 {
                 System.out.print("Please enter a patient ID: ");
                 searchID = input.nextLine();
                 
-                PROG6112_Assignment1_ST10509664 details3 = new PROG6112_Assignment1_ST10509664();
-                details3.getDetails();
+                details.getDetails();
                 
                 //find the correct index to delete the correct line
                 int matchIndex2 = -1;
@@ -261,27 +295,8 @@ public class PROG6112_Assignment1_ST10509664 {
             break;
             
             case 5:
-                PROG6112_Assignment1_ST10509664 details4 = new PROG6112_Assignment1_ST10509664();
-                details4.getDetails();
-                
-                if (count == 0) {
-                    System.out.println("No patients registered yet.");
-                } else {
-                    System.out.println("\n--------------------------------------------------");
-                    System.out.println("\tAll Registered Patients");
-                    System.out.println("--------------------------------------------------");
-
-                    for (int i = 0; i < count; i++) {
-                        System.out.println("Patient ID: " + ID[i]);
-                        System.out.println("First Name: " + name1[i]);
-                        System.out.println("Last Name: " + name2[i]);
-                        System.out.println("Age: " + Age[i]);
-                        System.out.println("Gender: " + Gender[i]);
-                        System.out.println("Medical Condition: " + Condition[i]);
-                        System.out.println("Patient Category: " + Category[i]);
-                        System.out.println("--------------------------------------------------");
-                    }
-                }
+                details.getDetails();
+                details.displayPatients();   
             break;
             
             
@@ -297,11 +312,11 @@ public class PROG6112_Assignment1_ST10509664 {
                 int option2 = input.nextInt();
                 input.nextLine();
                 
-                PROG6112_Assignment1_ST10509664 details5 = new PROG6112_Assignment1_ST10509664();
-                details5.getDetails();
+                PROG6112_Assignment1_ST10509664 details2 = new PROG6112_Assignment1_ST10509664();
+                details2.getDetails();
                 switch(option2) {
                     case 1: 
-                        details5.getOccupiedBeds();
+                        details2.getOccupiedBeds();
                         //allocate beds
                         countAvailable = 0;
                         for(int r = 0; r < 4; r++) {
@@ -336,7 +351,7 @@ public class PROG6112_Assignment1_ST10509664 {
                         //select the patient you want to discharge, and change their category to outpatient in the textfile
                         System.out.print("Please enter a patient ID: ");
                         searchID = input.nextLine();
-                        details5.getDetails();
+                        details2.getDetails();
 
                         //find the correct index to delete the correct line
                         int matchIndex3 = -1;
@@ -389,7 +404,7 @@ public class PROG6112_Assignment1_ST10509664 {
                             }
                         }         
                         
-                        details5.getOccupiedBeds();
+                        details2.getOccupiedBeds();
                         //allocate beds
                         countAvailable = 0;
                         for(int r = 0; r < 4; r++) {
@@ -436,12 +451,12 @@ public class PROG6112_Assignment1_ST10509664 {
                     break;
                     
                     case 4: 
-                        details5.getAvailableBeds();
+                        details2.getAvailableBeds();
                         System.out.println("\n--------------------------------------------------");
                     break;
                     
                     case 5: 
-                        details5.getOccupiedBeds();
+                        details2.getOccupiedBeds();
                         //allocate beds
                         countAvailable = 0;
                         for(int r = 0; r < 4; r++) {
@@ -466,19 +481,101 @@ public class PROG6112_Assignment1_ST10509664 {
                         }
                         System.out.println("\n--------------------------------------------------");
                     break;
-                    
+                    default:
+                    System.out.println("Invalid option"); 
                 }
             break;
             
             
             case 7:
+                System.out.println("Please select one of the following options below");
+                System.out.println("1) Patient report");
+                System.out.println("2) Bed occupancy report");
+                int option3 = input.nextInt();
+                input.nextLine();
+                
+                switch(option3) {
+                    case 1: 
+                        System.out.println("=====================================================");  
+                        System.out.println("\t\tPATIENT REPORT");
+                        System.out.println("====================================================="); 
+                        //display all registered patients
+                        details.getDetails();
+                        details.displayPatients();  
+                        System.out.println("--------------------------------------------------");
+                        //display number of registered patients
+                        System.out.println("Number of registered patients: " + count);
+                        System.out.println("--------------------------------------------------");
+                        System.out.println("=====================================================");  
+                        System.out.println("\t\tEND OF REPORT");
+                        System.out.println("====================================================="); 
+                    break;
+                    
+                    case 2:
+                        System.out.println("=====================================================");  
+                        System.out.println("\t\tBED OCCUPANCY REPORT");
+                        System.out.println("====================================================="); 
+                        //display available beds                        
+                        details.getDetails();
+                        System.out.println("All available beds:");
+                        System.out.println("");
+                        details.getAvailableBeds();
+                        System.out.println("\n--------------------------------------------------"); 
+                        //display all occupied beds
+                        System.out.println("All occupied beds:");
+                        System.out.println("");
+                        details.getOccupiedBeds();
+                        //allocate beds
+                        countAvailable = 0;
+                        for(int r = 0; r < 4; r++) {
+                            for(int c = 0; c < 5; c++) {
+                                if( countAvailable < countInpatient ){
+                                    countAvailable++;
+                                    occupiedBeds[r][c] = "B" + countAvailable;  
+                                }
+                            }
+                        }
+                        //allocate the occupied beds in the 2D array
+                        beds = "";
+                        for(int r = 0; r < 4; r++) {
+                            String out = "";
+                            for(int c = 0; c < 5; c++) {
+                                out = out + occupiedBeds[r][c] + "\t";
+                                if(!occupiedBeds[r][c].equals("-")){
+                                    beds = beds + occupiedBeds[r][c] + " ";
+                                }
+                            }
+                            System.out.println(out);
+                        }
+                        System.out.println("\n--------------------------------------------------"); 
+
+                        //display total number of occupied beds
+                        System.out.println("Number of occupied beds: " + countInpatient);
+                        System.out.println("--------------------------------------------------");
+                        //display ward occupancy percentage
+                        double occupancy = (countInpatient*100)/20;
+                        System.out.println("Occupancy percentage: " + occupancy + "%");
+                        System.out.println("--------------------------------------------------");
+
+                        System.out.println("=====================================================");  
+                        System.out.println("\t\tEND OF REPORT");
+                        System.out.println("====================================================="); 
+                    break;
+                    default:
+                    System.out.println("Invalid option");
+            break;
+                }
+            break;
+            
+            
+            case 8:
                 System.out.println("--------------------------------------------------");
                 System.out.println("Goodbye!");
                 running = false;
                 System.exit(0);
+            break;
             default:
             System.out.println("Invalid option");
-            break;
           }  
 
         }
@@ -567,6 +664,27 @@ public class PROG6112_Assignment1_ST10509664 {
                }
            }
            System.out.println(out);                            
+        }
+    }
+    
+    public void displayPatients() {
+        if (count == 0) {
+            System.out.println("No patients registered yet.");
+        } else {
+            System.out.println("\n--------------------------------------------------");
+            System.out.println("\tAll Registered Patients");
+            System.out.println("--------------------------------------------------");
+
+            for (int i = 0; i < count; i++) {
+                System.out.println("Patient ID: " + ID[i]);
+                System.out.println("First Name: " + name1[i]);
+                System.out.println("Last Name: " + name2[i]);
+                System.out.println("Age: " + Age[i]);
+                System.out.println("Gender: " + Gender[i]);
+                System.out.println("Medical Condition: " + Condition[i]);
+                System.out.println("Patient Category: " + Category[i]);
+                System.out.println("--------------------------------------------------");
+            }
         }
     }
 

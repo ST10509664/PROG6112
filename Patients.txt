@@ -5,3 +5,4 @@
 83942#Miles#Moralis#18#male#Radiation#Inpatient
 37242#Tom#Jerry#16#male#paranoia#Inpatient
 83942#Miles#Moralis#18#male#Radiation#Inpatient
+3472#Harry#Shoe#35#male#Bipolar Disorder#Outpatient
